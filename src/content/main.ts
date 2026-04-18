@@ -1,9 +1,16 @@
-import { loadBlockedCompanies, normalizeCompanyName, STORAGE_KEY } from '../shared/storage';
+import {
+  ENABLED_STORAGE_KEY,
+  loadBlockedCompanies,
+  loadFilterEnabled,
+  normalizeCompanyName,
+  STORAGE_KEY,
+} from '../shared/storage';
 
 const HIDDEN_ATTRIBUTE = 'data-openmachete-hidden';
 const STATUS_ID = 'openmachete-status';
 
 let blockedCompanies = new Set<string>();
+let filterEnabled = true;
 let statusNode: HTMLDivElement | null = null;
 let scheduled = false;
 let lastUrl = location.href;
@@ -145,6 +152,11 @@ function ensureStatusNode(): HTMLDivElement {
 function renderStatus(hiddenCount: number): void {
   const node = ensureStatusNode();
 
+  if (!filterEnabled) {
+    node.textContent = 'OpenMachete off: job cards are visible.';
+    return;
+  }
+
   if (blockedCompanies.size === 0) {
     node.textContent = 'OpenMachete inactive: add companies in the extension popup.';
     return;
@@ -160,7 +172,8 @@ function applyFilters(): void {
   let hiddenCount = 0;
 
   for (const card of cards) {
-    const hidden = blockedCompanies.size > 0 && collectCandidateNames(card).some(isCompanyMatch);
+    const hidden =
+      filterEnabled && blockedCompanies.size > 0 && collectCandidateNames(card).some(isCompanyMatch);
     setCardVisibility(card, hidden);
 
     if (hidden) {
@@ -228,23 +241,24 @@ function watchUrlChanges(): void {
   window.addEventListener('popstate', handleUrlChange);
 }
 
-async function refreshBlockedCompanies(): Promise<void> {
-  const companies = await loadBlockedCompanies();
+async function refreshSettings(): Promise<void> {
+  const [companies, enabled] = await Promise.all([loadBlockedCompanies(), loadFilterEnabled()]);
   blockedCompanies = new Set(companies.map(normalizeCompanyName));
+  filterEnabled = enabled;
   scheduleApply();
 }
 
 async function bootstrap(): Promise<void> {
-  await refreshBlockedCompanies();
+  await refreshSettings();
   observeDom();
   watchUrlChanges();
 
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== 'sync' || !(STORAGE_KEY in changes)) {
+    if (areaName !== 'sync' || (!(STORAGE_KEY in changes) && !(ENABLED_STORAGE_KEY in changes))) {
       return;
     }
 
-    void refreshBlockedCompanies();
+    void refreshSettings();
   });
 }
 

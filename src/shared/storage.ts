@@ -1,4 +1,5 @@
 export const STORAGE_KEY = 'blockedCompanies';
+export const ENABLED_STORAGE_KEY = 'filterEnabled';
 
 export function normalizeCompanyName(value: string): string {
   return value
@@ -47,5 +48,22 @@ export async function loadBlockedCompanies(): Promise<string[]> {
 export async function saveBlockedCompanies(companies: string[]): Promise<void> {
   await chrome.storage.sync.set({
     [STORAGE_KEY]: sanitizeCompanyList(companies),
+  });
+}
+
+export async function loadFilterEnabled(): Promise<boolean> {
+  const stored = await chrome.storage.sync.get(ENABLED_STORAGE_KEY);
+  const enabled = stored[ENABLED_STORAGE_KEY];
+
+  if (typeof enabled !== 'boolean') {
+    return true;
+  }
+
+  return enabled;
+}
+
+export async function saveFilterEnabled(enabled: boolean): Promise<void> {
+  await chrome.storage.sync.set({
+    [ENABLED_STORAGE_KEY]: enabled,
   });
 }

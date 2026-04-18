@@ -6,11 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "package": "vite build"
+    "package": "vite build",
+    "fmt": "oxfmt",
+    "lint": "oxlint"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^2.2.0",
     "@types/chrome": "^0.1.6",
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.4",
     "vite-plugin-zip-pack": "^1.2.4"
