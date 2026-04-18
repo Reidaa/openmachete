@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenMachete</title>
+    <script type="module" src="./main.ts"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="panel">
+        <p class="eyebrow">Welcome to the Jungle filter</p>
+        <h1>OpenMachete</h1>
+        <p class="lede">
+          Hide job cards from companies you do not want to review. Add one company per line or
+          paste a comma-separated list.
+        </p>
+
+        <form id="company-form" class="form">
+          <label class="field">
+            <span>Blocked companies</span>
+            <textarea
+              id="company-list"
+              name="company-list"
+              rows="10"
+              placeholder="AXA&#10;Société Générale&#10;EDF"
+            ></textarea>
+          </label>
+
+          <div class="actions">
+            <button type="submit" class="primary">Save filters</button>
+          </div>
+        </form>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </section>
+    </main>
+  </body>
+</html>
