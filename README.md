@@ -28,3 +28,4 @@ This outputs:
 
 - `dist/` for unpacked loading
 - `release/openmachete.zip` for distribution
+
