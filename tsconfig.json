@@ -10,9 +10,5 @@
     "allowJs": false,
     "skipLibCheck": true
   },
-  "include": [
-    "manifest.config.ts",
-    "vite.config.ts",
-    "src/**/*.ts"
-  ]
+  "include": ["manifest.config.ts", "vite.config.ts", "src/**/*.ts"]
 }

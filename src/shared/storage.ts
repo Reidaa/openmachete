@@ -1,13 +1,13 @@
-export const STORAGE_KEY = 'blockedCompanies';
-export const ENABLED_STORAGE_KEY = 'filterEnabled';
+export const STORAGE_KEY = "blockedCompanies";
+export const ENABLED_STORAGE_KEY = "filterEnabled";
 
 export function normalizeCompanyName(value: string): string {
   return value
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
-    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -42,7 +42,9 @@ export async function loadBlockedCompanies(): Promise<string[]> {
     return [];
   }
 
-  return sanitizeCompanyList(companies.filter((value): value is string => typeof value === 'string'));
+  return sanitizeCompanyList(
+    companies.filter((value): value is string => typeof value === "string"),
+  );
 }
 
 export async function saveBlockedCompanies(companies: string[]): Promise<void> {
@@ -55,7 +57,7 @@ export async function loadFilterEnabled(): Promise<boolean> {
   const stored = await chrome.storage.sync.get(ENABLED_STORAGE_KEY);
   const enabled = stored[ENABLED_STORAGE_KEY];
 
-  if (typeof enabled !== 'boolean') {
+  if (typeof enabled !== "boolean") {
     return true;
   }
 

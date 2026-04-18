@@ -52,5 +52,3 @@ jobs:
           name: openmachete-zip
           path: release/openmachete.zip
           if-no-files-found: error
-
-
